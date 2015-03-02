@@ -112,3 +112,10 @@ body {
     border-top-right-radius: 0;
     border-style: none, solid, solid, solid;
   }
+.main-alert {
+  max-width: 400px;
+  margin: 0 auto;
+}
+.alert-hidden {
+  visibility: hidden;
+}
