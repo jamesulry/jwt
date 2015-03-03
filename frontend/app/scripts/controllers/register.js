@@ -1,18 +1,13 @@
 'use strict';
 
-/**
- * @ngdoc function
- * @name jwtApp.controller:RegisterCtrl
- * @description
- * # RegisterCtrl
- * Controller of the jwtApp
- */
 angular.module('jwtApp')
   .controller('RegisterCtrl', function ($scope, $http, alert) {
     $scope.submit = function(){
+      var url  = "http://localhost:8373/register";
+      var user = {
+        name: "Alex"
+      };
 
-      var url  = "/";
-      var user = {};
       $http.post(url, user)
         .success(function(response){
           alert("success", "OK!", "You are now registered");
