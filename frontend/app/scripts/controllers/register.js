@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('jwtApp')
-  .controller('RegisterCtrl', function ($scope, $http, alert) {
+  .controller('RegisterCtrl', function ($scope, $http, alert, authToken) {
     $scope.submit = function(){
       var url  = "http://localhost:8373/register";
       var user = {
@@ -12,6 +12,7 @@ angular.module('jwtApp')
       $http.post(url, user)
         .success(function(response){
           alert("success", "OK!", "You are now registered");
+          authToken.setToken(res.token);
         })
         .error(function(err){
           alert("warning", "Oops!", "Could not register");
