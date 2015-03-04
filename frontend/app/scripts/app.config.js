@@ -7,7 +7,6 @@ angular
     $urlRouterProvider.otherwise('/');
 
     $stateProvider
-
       .state('main', {
         url: '/',
         templateUrl: '/views/main.html'

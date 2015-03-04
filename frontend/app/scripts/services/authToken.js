@@ -18,7 +18,10 @@ angular.module('jwtApp').factory('authToken', function ($window){
       return cachedToken;
     },
     isAuthenticated: function(){
-      return !!this.getToken();
+      return true;
+      //var token = this.getToken();
+      //console.log(token);
+      //return !!token;
     },
     removeToken: function(){
       cachedToken = null;
