@@ -10,7 +10,7 @@ angular.module('jwtApp').controller('RegisterCtrl', function ($scope, $http, ale
 
       $http.post(url, user)
         .success(function(res){
-          alert("success", "OK!", "You are now registered");
+          alert("success", "Account created.  Welcome " + res.user.email);
           authToken.setToken(res.token);
         })
         .error(function(err){
