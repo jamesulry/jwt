@@ -104,13 +104,19 @@ body {
     margin-bottom: -1px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
-    border-style: solid, solid, none, solid;
+    border-top-style: solid;
+    border-left-style: solid;
+    border-bottom-style: none;
+    border-right-style: solid;
   }
   .form-signin input[type="password"] {
     margin-bottom: -1px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-    border-style: none, solid, solid, solid;
+    border-top-style: none;
+    border-left-style: solid;
+    border-bottom-style: solid;
+    border-right-style: solid;
   }
 .main-alert {
   max-width: 400px;
