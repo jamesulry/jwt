@@ -1,11 +1,5 @@
 'use strict';
 
-/**
- * @ngdoc directive
- * @name jwtApp.directive:validateEquals
- * @description
- * # sameAs
- */
 angular.module('jwtApp')
   .directive('validateEquals', function () {
     return {
@@ -16,10 +10,10 @@ angular.module('jwtApp')
                 ngModelCtrl.$setValidity('equal', valid);
                 return valid ? value : undefined;
             }
-            
+
             ngModelCtrl.$parsers.push(validateEquals);
             ngModelCtrl.$formatters.push(validateEquals);
-            
+
             scope.$watch(attrs.validateEquals, function () {
                 ngModelCtrl.$setViewValue(ngModelCtrl.$viewValue);
             });

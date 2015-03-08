@@ -3,7 +3,7 @@
 angular.module('jwtApp').factory('authToken', function ($window){
   var storage = $window.localStorage;
   var cachedToken;
-  var itemKey = "userToken";
+  var itemKey = 'userToken';
 
   var authToken = {
     setToken: function(token){

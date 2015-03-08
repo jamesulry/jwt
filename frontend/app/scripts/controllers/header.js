@@ -1,7 +1,10 @@
-angular.module('jwtApp').controller('HeaderCtrl', function($scope, authToken) {
-  var isAuthenticated = function() {
-    return authToken.isAuthenticated();
-  };
+'use strict';
 
-  $scope.isAuthenticated = isAuthenticated;
-});
+angular.module('jwtApp')
+  .controller('HeaderCtrl', function($scope, authToken) {
+    var isAuthenticated = function() {
+      return authToken.isAuthenticated();
+    };
+
+    $scope.isAuthenticated = isAuthenticated;
+  });

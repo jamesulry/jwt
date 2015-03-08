@@ -1,12 +1,5 @@
 'use strict';
 
-/**
- * @ngdoc service
- * @name jwtApp.alert
- * @description
- * # alert
- * Service in the jwtApp.
- */
 angular.module('jwtApp')
   .service('alert', function ($rootScope, $timeout) {
     var alertTimeout;
@@ -23,5 +16,5 @@ angular.module('jwtApp')
       alertTimeout = $timeout(function() {
         $rootScope.alert.show = false;
       }, timeout || 2000);
-    }
+    };
   });
