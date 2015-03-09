@@ -28,7 +28,7 @@ app.post('/register', function(req, res){
 
     var payload = {
         iss: req.hostname,
-        sub: user._id
+        sub: newUser.id
     };
 
     var token = jwt.encode(payload, 'shhhh....');

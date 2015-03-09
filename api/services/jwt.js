@@ -28,7 +28,9 @@ exports.decode = function(token, secret) {
 
     var rawSignature = segments[0] + '.' + segments[1];
 
-    verify(rawSignature, secret, segments[2]);
+    if (!verify(rawSignature, secret, segments[2])) {
+        throw new Error('Verification failed');
+    }
 
     return payload;
 };
@@ -45,4 +47,6 @@ function sign(str, key){
     return crypto.createHmac("sha256", key).update(str).digest("base64");
 }
 
-function verify()
+function verify(raw, secret, signature) {
+    return signature === sign(raw, secret);
+}
