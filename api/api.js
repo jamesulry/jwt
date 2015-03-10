@@ -6,11 +6,19 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var User = require('./models/User.js');
 var jwt = require('jwt-simple');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
 
 
 var app = express();
 
 app.use(bodyParser.json());
+app.use(passport.initialize());
+
+passport.serializeUser(function(user, done){
+    done(null, user.id);
+});
+
 app.use(function(req, res, next){
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
@@ -18,6 +26,36 @@ app.use(function(req, res, next){
 
     next();
 });
+
+var strategy = new LocalStrategy({usernameField: 'email'},
+    function(email, password, done) {
+        var searchUser = {
+            email: email
+        };
+
+        User.findOne(searchUser, function(err, user){
+            if (err) {
+                return done(err);
+            }
+
+            if (!user) {
+                return done(null, false, {message: 'Wrong email/password'});
+            }
+
+            user.comparePasswords(password, function(err, isMatch){
+                if (err) {
+                    return done(err);
+                }
+
+                if (!isMatch) {
+                    return done(null, false, {message: 'Wrong email/password'});
+                }
+
+                return done(null, user);
+            });
+        })
+    });
+passport.use(strategy);
 
 app.post('/register', function(req, res){
     var user = req.body;
@@ -31,34 +69,20 @@ app.post('/register', function(req, res){
     });
 });
 
-app.post('/login', function(req, res){
-   req.user = req.body;
-
-    var searchUser = {
-        email: req.user.email
-    };
-
-    User.findOne(searchUser, function(err, user){
+app.post('/login', function(req, res, next){
+    passport.authenticate('local', function(err, user){
         if (err) {
-            throw err;
+            next(err);
         }
 
-        if (!user) {
-            return res.status(401).send({message: 'Wrong email/password'});
-        }
-
-        user.comparePasswords(req.user.password, function(err, isMatch){
+        req.login(user, function(err){
             if (err) {
-                throw err;
-            }
-
-            if (!isMatch) {
-                return res.status(401).send({message: 'Wrong email/password'});
+                next(err);
             }
 
             createSendToken(user, res);
         });
-    })
+    })(req, res, next);
 });
 
 function createSendToken(user, res) {
