@@ -10,6 +10,20 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
 
+
+function createSendToken(user, res) {
+    var payload = {
+        sub: user.id
+    };
+
+    var token = jwt.encode(payload, 'shhhh....');
+
+    res.status(200).send({
+        user: user.toJSON(),
+        token: token
+    });
+}
+
 var app = express();
 
 app.use(bodyParser.json());
@@ -27,7 +41,11 @@ app.use(function(req, res, next){
     next();
 });
 
-var strategy = new LocalStrategy({usernameField: 'email'},
+var strategyOptions = {
+    usernameField: 'email'
+};
+
+var loginStrategy = new LocalStrategy(strategyOptions,
     function(email, password, done) {
         var searchUser = {
             email: email
@@ -55,48 +73,29 @@ var strategy = new LocalStrategy({usernameField: 'email'},
             });
         })
     });
-passport.use(strategy);
 
-app.post('/register', function(req, res){
-    var user = req.body;
+var registerStrategy = new LocalStrategy(strategyOptions, function(email, password, done) {
     var newUser = new User({
-        email: user.email,
-        password: user.password
+        email: email,
+        password: password
     });
 
     newUser.save(function(err){
-        createSendToken(newUser, res);
+        done(null, newUser);
     });
+
 });
 
-app.post('/login', function(req, res, next){
-    passport.authenticate('local', function(err, user){
-        if (err) {
-            next(err);
-        }
+passport.use('local-login', loginStrategy);
+passport.use('local-register', registerStrategy);
 
-        req.login(user, function(err){
-            if (err) {
-                next(err);
-            }
-
-            createSendToken(user, res);
-        });
-    })(req, res, next);
+app.post('/register', passport.authenticate('local-register'), function(req, res){
+    createSendToken(req.user, res);
 });
 
-function createSendToken(user, res) {
-    var payload = {
-        sub: user.id
-    };
-
-    var token = jwt.encode(payload, 'shhhh....');
-
-    res.status(200).send({
-        user: user.toJSON(),
-        token: token
-    });
-};
+app.post('/login', passport.authenticate('local-login'), function(req, res){
+    createSendToken(req.user, res);
+});
 
 var jobs = [
     'Cook',
