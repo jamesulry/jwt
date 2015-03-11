@@ -81,7 +81,7 @@ var registerStrategy = new LocalStrategy(strategyOptions, function(email, passwo
     });
 
     newUser.save(function(err){
-        done(null, newUser);
+        done(err, newUser);
     });
 
 });
